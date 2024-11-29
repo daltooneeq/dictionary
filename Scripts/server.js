@@ -61,14 +61,10 @@ app.get("/auth", function (_, res){
     page = path.join(__dirname, '../Pages/auth.html');
     res.sendFile(page);   
 })
-
-
-app.post("/sendnew", urlencodedParser, function(req, res){
-    if(!req.body) return res.sendStatus(400);
-    console.log(req.body);
-    res.send(`${req.body.word} - ${req.body.supertag} - ${req.body.tag}`);
-    database.insertData(req.body.word, req.body.supertag, req.body.tag);
-});
+app.get('/setlang', function (_, res){
+    page = path.join(__dirname + '../Pages/setlang.html');
+    res.sendFile(page);
+})
 
 
 app.post("/reg", urlencodedParser, async function(req, res){
@@ -84,13 +80,19 @@ app.post("/auth", urlencodedParser, async function(req,res){
         res.send('Incorrect login or password')
     }
     else{
-        req.session.login = auth[0];
-        req.session.liked = auth[2];
-        req.session.firstlang = auth[3];
-        req.session.secondland = auth[4];
+        req.session.login = auth.login;
+        req.session.liked = auth.liked;
+        req.session.firstlang = auth.firstlang;
+        req.session.secondland = auth.secondlang;
         
-        res.send('Success');
+        res.send(`Success`);
     }
+})
+
+app.post('/setlang', urlencodedParser, function (req, res){
+    database.setLang(req.body.firstlang, req.body.secondlang, req.session.login);
+    req.session.firstlang = req.body.firstlang;
+    req.session.secondlang = req.body.secondlang;
 })
 
 app.post("/words", urlencodedParser, async function(req, res){

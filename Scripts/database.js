@@ -54,7 +54,7 @@ exports.registrateUser = async function(login, password){
 exports.authUser = async function(login, password){
     try{
         const res = await client.query('SELECT * FROM users WHERE login = $1 AND password = $2', [login, password]);
-        if (res.rows.length > 0) {
+        if (res.rows.length == 0) {
             return -1;
         }
         else{
@@ -63,4 +63,13 @@ exports.authUser = async function(login, password){
     } catch (err) {
         console.error('Error executing query', err.stack);
     }
+}
+
+exports.setLang = function(firstlang, secondlang, login){
+    const query = 'UPDATE users SET firstlang = $1, secondlang = $2 WHERE login = $3';
+    const values = [firstlang, secondlang, login];
+
+    client
+        .query(query, values)
+        .catch(err => console.error(err));
 }

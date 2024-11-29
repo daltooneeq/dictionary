@@ -35,26 +35,30 @@ exports.getWord = async function(){
     }
 }
 
-exports.registrateUser = async function(login, passwod){
-    isEmployed = await pool.query('SELECT * FROM users WHERE login = $1', [login])
-    if (isEmployed.rows.lenght == 0)
+exports.registrateUser = async function(login, password){
+    isEmployed = await client.query('SELECT * FROM users WHERE login = $1', [login])
+    if (isEmployed.rows.length == 0)
     {
-        const query = `INSERT INTO users (login, password, categories) VALUES ($1, $2, "liked":[])`;
-        const values = [login, passwod]
-        client
-            .query(query, values)
-            .catch(err => console.log(err))
-        return true
+        const query = `INSERT INTO users (login, password, categories) VALUES ($1, $2, '{"liked":[]}')`;
+        const values = [login, password]
+        try{
+            await client.query(query, values)
+            return true
+        } catch (err) {
+            console.error('Ошибка при регистрации пользователя:', err);
+            return false;
+        }
+        
     } else return false;
 }
-exports.authuser = async function(login, password){
+exports.authUser = async function(login, password){
     try{
-        const res = await pool.query('SELECT * FROM users WHERE login = $1, password = $2', [login, password]);
+        const res = await client.query('SELECT * FROM users WHERE login = $1 AND password = $2', [login, password]);
         if (res.rows.length > 0) {
             return -1;
         }
         else{
-            return res.rows[0];
+            return res.rows[0]
         }
     } catch (err) {
         console.error('Error executing query', err.stack);

@@ -71,15 +71,26 @@ app.post("/sendnew", urlencodedParser, function(req, res){
 });
 
 
-app.post("/reg", urlencodedParser, function(req, res){
+app.post("/reg", urlencodedParser, async function(req, res){
     register = await database.registrateUser(req.body.login, req.body.password)
     if (register){
         res.send('Succefull')
     }
     else res.send('This login is already registered')
 })
-app.post("/auth", function(req,res){
-    
+app.post("/auth", urlencodedParser, async function(req,res){
+    auth = await database.authUser(req.body.login, req.body.password)
+    if (auth == -1){
+        res.send('Incorrect login or password')
+    }
+    else{
+        req.session.login = auth[0];
+        req.session.liked = auth[2];
+        req.session.firstlang = auth[3];
+        req.session.secondland = auth[4];
+        
+        res.send('Success');
+    }
 })
 
 app.post("/words", urlencodedParser, async function(req, res){

@@ -4,31 +4,45 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+
 </head>
 <body>
     <form method="post">
         <table>
             <tr>
-                <td>
-                    <select name="firstlang">
-                        <option value="en">en</option>
-                        <option value="ru">ru</option>
-                        <option value="es">es</option>
-                        <option value="fr">fr</option>
-                    </select>
-                </td>
-                <td>
-                    <select name="secondlang">
-                        <option value="en">en</option>
-                        <option value="ru">ru</option>
-                        <option value="es">es</option>
-                        <option value="fr">fr</option>
-                    </select>
-                </td>
+                
             </tr>
         </table>
         <input type="submit" value="Новое слово">
     </form>
 </body>
-<script src="words.html"></script>
 </html>
+<style>
+    body{
+        display: flex;
+        justify-content: center;
+    }
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        overflow: hidden;
+
+    }
+    table, tr, td {
+        border: 3px solid black;
+        text-align: center; 
+    }
+    input {
+        width: 100%;
+        margin: 1%;
+    }
+    td {
+        width: 100%;
+    }
+    p{
+        margin: 1%;
+        font-family: Verdana;
+        font-size: 50%;
+        font-weight: bold;
+    }
+</style>
